@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Register — CSIR-SERC{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>{{ t['register'] if t else 'Register' }}</h2>
+  <form method="post">
+    {{ csrf_token() }}
+    <div class="grid">
+      <label>Email <input type="email" name="email" required></label>
+      <label>Mobile <input type="tel" name="mobile" pattern="^[0-9]{10}$" required></label>
+      <label>Password <input type="password" name="password" minlength="8" required></label>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">Create account</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

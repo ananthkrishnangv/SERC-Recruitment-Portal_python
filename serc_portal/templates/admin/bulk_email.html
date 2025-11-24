@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Bulk Email — CSIR-SERC{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>Bulk Email — Interview Scheduling</h2>
+  <form method="post">
+    {{ csrf_token() }}
+    <div class="grid">
+      <label>Filter by Status
+        <select name="filter_status">
+          <option value="">(All)</option>
+          <option>Submitted</option>
+          <option>Under Review</option>
+          <option>Shortlisted</option>
+          <option>Rejected</option>
+        </select>
+      </label>
+      <label>Filter by Post Code
+        <select name="filter_post_code">
+          <option value="">(All)</option>
+          <option>SCT-1</option><option>SCT-2</option><option>SCT-3</option><option>SCT-4</option><option>SCT-5</option><option>SCT-6</option><option>SCT-7</option><option>SCT-8</option>
+        </select>
+      </label>
+      <label>Interview Date & Time <input type="text" name="interview_dt" placeholder="e.g., 05 Dec 2025, 10:00 AM"></label>
+      <label>Venue <input type="text" name="venue" placeholder="CSIR-SERC, Taramani, Chennai"></label>
+      <label>Subject <input type="text" name="subject" placeholder="Interview Call — CSIR-SERC Scientist" required></label>
+      <label>Body (use placeholders: {name}, {post_code}, {app_id}, {interview_dt}, {venue})
+        <textarea name="body" rows="8" required>Dear {name},\n\nYou are invited for the interview for the Scientist position ({post_code}).\nApplication ID: {app_id}.\nDate & Time: {interview_dt}\nVenue: {venue}\n\nPlease bring original documents.\n\nRegards,\nCSIR-SERC</textarea>
+      </label>
+      <label><input type="checkbox" name="dry_run"> Dry Run (preview only)</label>
+    </div>
+    <div class="actions"><button class="btn btn-primary" type="submit">Send / Preview</button></div>
+  </form>
+</div>
+{% if previews %}
+<div class="panel">
+  <h3>Previews (Dry Run)</h3>
+  <ul>
+  {% for p in previews %}
+    <li><strong>To:</strong> {{ p.to }} | <strong>Subject:</strong> {{ p.subject }}<br><pre>{{ p.body }}</pre></li>
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

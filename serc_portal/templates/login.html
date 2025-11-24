@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Login — CSIR-SERC{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>{{ t['login'] if t else 'Login' }}</h2>
+  <form method="post">
+    {{ csrf_token() }}
+    <div class="grid">
+      <label>Email <input type="email" name="email" required></label>
+      <label>Password <input type="password" name="password" required></label>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{{ t['login'] if t else 'Login' }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Review Application {{ app.id }} — CSIR-SERC{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>Review Application #{{ app.id }} — {{ app.post_code }}</h2>
+  <p>Status: <strong>{{ app.status }}</strong></p>
+  <form method="post" action="{{ url_for('admin.update_status', app_id=app.id) }}">
+    {{ csrf_token() }}
+    <div class="grid">
+      <label>Change status
+        <select name="status">
+          <option {% if app.status=='Submitted' %}selected{% endif %}>Submitted</option>
+          <option {% if app.status=='Under Review' %}selected{% endif %}>Under Review</option>
+          <option {% if app.status=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
+          <option {% if app.status=='Rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+      </label>
+      <label>Shortlist tag <input type="text" name="shortlist_tag" value="{{ app.shortlist_tag or '' }}" placeholder="Top-10 / Borderline / Docs-Pending"></label>
+      <label>Reviewer notes <textarea name="reviewer_notes" rows="4">{{ app.reviewer_notes or '' }}</textarea></label>
+    </div>
+    <button class="btn btn-primary" type="submit">Update</button>
+  </form>
+  <hr>
+  <h3>Applicant</h3>
+  <p><strong>{{ profile.name }}</strong> | Category: {{ profile.category }} | PwBD: {{ profile.pwbd }} | City: {{ profile.city }}, {{ profile.state }}</p>
+  <h3>Employment</h3>
+  <ul>
+    {% for em in emps %}
+      <li>{{ em.org }} — {{ em.designation }} ({{ em.dt_from }} → {{ em.dt_to }})</li>
+    {% endfor %}
+  </ul>
+  <h3>Documents</h3>
+  <ul>
+    {% for d in docs %}
+      <li>{{ d.doc_type }} — {{ d.storage_path }}</li>
+    {% endfor %}
+  </ul>
+  <h3>Payment</h3>
+  {% if pay %}
+    <form method="post" action="{{ url_for('admin.payment_verify') }}">
+      {{ csrf_token() }}
+      <p>Applicable: {{pay.applicable}} | UTR: {{pay.utr}} | Date: {{pay.utr_date}} | Amount: ₹{{pay.amount}} | Verified: {{pay.verified}} {% if pay.verified %}(by {{pay.verified_by}} at {{pay.verified_at}}){% endif %}</p>
+      <input type="hidden" name="payment_id" value="{{ pay.id }}">
+      <label>Mark as verified? <select name="verified"><option value="true">Yes</option><option value="false">No</option></select></label>
+      <button class="btn btn-secondary" type="submit">Update Verification</button>
+    </form>
+  {% else %}
+    <p>No payment record.</p>
+  {% endif %}
+</div>
+{% endblock %}

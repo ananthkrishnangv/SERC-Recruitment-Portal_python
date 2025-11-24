@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — CSIR-SERC{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>Admin Dashboard</h2>
+  <div class="grid">
+    <div class="card">Submitted: {{ counts['Submitted'] }}</div>
+    <div class="card">Under Review: {{ counts['Under Review'] }}</div>
+    <div class="card">Shortlisted: {{ counts['Shortlisted'] }}</div>
+    <div class="card">Rejected: {{ counts['Rejected'] }}</div>
+  </div>
+  <table class="table">
+    <thead><tr><th>ID</th><th>Post Code</th><th>Status</th><th>Tag</th><th>Submitted</th><th>View</th></tr></thead>
+    <tbody>
+      {% for a in apps %}
+      <tr>
+        <td>{{ a.id }}</td>
+        <td>{{ a.post_code }}</td>
+        <td>{{ a.status }}</td>
+        <td>{{ a.shortlist_tag or '' }}</td>
+        <td>{{ a.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td><a class="btn btn-secondary" href="{{ url_for('admin.review_application', app_id=a.id) }}">Review</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

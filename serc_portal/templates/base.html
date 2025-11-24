@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CSIR-SERC Scientist Portal{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='img/csir_logo.svg') }}" alt="CSIR Logo" class="logo">
+      <div>
+        <h1>CSIR-SERC — Scientist Recruitment (SE-2/2025)</h1>
+        <p class="sub">{{ t['apply_portal'] if t else 'Application Portal' }}</p>
+      </div>
+    </div>
+    <nav>
+      <ul class="top-actions">
+        {% if current_user.is_authenticated %}
+          <li><a class="btn" href="{{ url_for('auth.logout') }}">{{ t['logout'] if t else 'Logout' }}</a></li>
+          {% if current_user.role in ['admin','reviewer'] %}
+            <li><a class="btn" href="{{ url_for('admin.dashboard') }}">Admin</a></li>
+            <li><a class="btn" href="{{ url_for('analytics.analytics_home') }}">Analytics</a></li>
+            <li><a class="btn" href="{{ url_for('reports.reports_home') }}">Reports</a></li>
+            <li><a class="btn" href="{{ url_for('admin.bulk_email') }}">Bulk Email</a></li>
+          {% endif %}
+        {% else %}
+          <li><a class="btn" href="{{ url_for('auth.login') }}">{{ t['login'] if t else 'Login' }}</a></li>
+          <li><a class="btn" href="{{ url_for('auth.register') }}">{{ t['register'] if t else 'Register' }}</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash">
+          {% for category, message in messages %}
+            <div class="flash-item {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="app-footer">
+    <small>© 2025 CSIR-SERC. Advt. No. SE-2/2025.</small>
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

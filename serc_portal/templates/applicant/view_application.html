@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Application {{ app.id }} — CSIR-SERC{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>Application #{{ app.id }} — {{ app.post_code }} — {{ app.status }}</h2>
+  <h3>Profile</h3>
+  <p><strong>{{ profile.name }}</strong>, Category: {{ profile.category }}, PwBD: {{ profile.pwbd }}</p>
+  {% if profile.photo_path %}<img src="{{ profile.photo_path }}" alt="Photo" style="max-width:120px;border-radius:6px;">{% endif %}
+  <h3>Education</h3>
+  <ul>
+    {% for e in edus %}
+      <li>{{e.degree_level}} — {{e.discipline}} — {{e.institute}} — {{e.year}} — {{e.marks}}</li>
+    {% endfor %}
+  </ul>
+  <h3>Payment</h3>
+  {% if pay %}
+    <p>Applicable: {{pay.applicable}} | UTR: {{pay.utr}} | Amount: {{pay.amount}} | Verified: {{pay.verified}}</p>
+  {% else %}
+    <p>No payment record.</p>
+  {% endif %}
+  <div class="actions">
+    <a class="btn" href="{{ url_for('applicant.application_pdf', app_id=app.id) }}">Download PDF</a>
+  </div>
+</div>
+{% endblock %}

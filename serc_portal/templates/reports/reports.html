@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Reports — CSIR-SERC{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>Reports & Export</h2>
+  <form method="get" action="{{ url_for('reports.export') }}">
+    <div class="grid">
+      <label>Format
+        <select name="format"><option value="csv">CSV</option><option value="xlsx">Excel (.xlsx)</option></select>
+      </label>
+      <label>Status
+        <select name="status"><option value="">(All)</option><option>Submitted</option><option>Under Review</option><option>Shortlisted</option><option>Rejected</option></select>
+      </label>
+      <label>Post Code
+        <select name="post_code"><option value="">(All)</option><option>SCT-1</option><option>SCT-2</option><option>SCT-3</option><option>SCT-4</option><option>SCT-5</option><option>SCT-6</option><option>SCT-7</option><option>SCT-8</option></select>
+      </label>
+      <label><input type="checkbox" name="include_photo" value="1"> Include Photo (Excel only)</label>
+    </div>
+    <div class="actions"><button class="btn btn-primary" type="submit">Export</button></div>
+  </form>
+  <p class="hint">Note: CSV cannot embed images; it will include the photo file path. Excel export can embed thumbnails.</p>
+</div>
+{% endblock %}
